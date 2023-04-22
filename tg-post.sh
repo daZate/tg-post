@@ -1,10 +1,12 @@
-if [[ "$1" == "" ]]
+#!/bin/sh
+
+if [ "$1" = "" ]
 then
    echo "Usage: tg-post (file_name) [@channel_name]"
 else
     token=`cat token.txt`
     file=`echo $1`
-    channel=$([ "$2" == "" ] && cat "channel.txt" || echo "$2")
+    channel=$([ "$2" = "" ] && cat "channel.txt" || echo "$2")
     ftype=`file -b --mime-type ${file}`
     
     case $ftype in
