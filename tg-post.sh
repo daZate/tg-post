@@ -4,19 +4,20 @@ if [ "$1" = "" ]
 then
    echo "Usage: tg-post (file_name) [@channel_name]"
 else
-    token=$(cat token.txt)
+    token=$(cat $XDG_CONFIG_HOME/tg-post/token.txt)
     file="$1"
-    channel=$([ "$2" = "" ] && cat "channel.txt" || echo "$2")
+    channel=$([ "$2" = "" ] && cat "$XDG_CONFIG_HOME/tg-post/channel.txt" || echo
+"$2")
     ftype=$(file -b --mime-type "${file}")
-    
+
     case $ftype in
-       image*) 
+       image*)
        echo "Posting an image in ${channel}..."
        url='https://api.telegram.org/bot'$token'/sendPhoto'
        curl -s -o /dev/null "$url"'?chat_id='"$channel" --form 'photo=@'"$file"
        echo "Done!"
        ;;
-       video*) 
+       video*)
        echo "Posting a video in ${channel}..."
        url='https://api.telegram.org/bot'$token'/sendVideo'
        curl -s -o /dev/null "$url"'?chat_id='"$channel" --form 'video=@'"$file"
@@ -28,7 +29,7 @@ else
        curl -s -o /dev/null "$url"'?chat_id='"$channel" --form 'audio=@'"$file"
        echo "Done!"
        ;;
-       *) 
+       *)
        echo "Posting a document in ${channel}..."
        url='https://api.telegram.org/bot'$token'/sendDocument'
        curl -s -o /dev/null "$url"'?chat_id='"$channel" --form 'document=@'"$file"
